@@ -1,15 +1,11 @@
 import 'dart:async';
-import 'package:bloc/bloc.dart';
 import 'package:rxdart/rxdart.dart';
 
-part 'login_bloc_state.dart';
-
-class LoginScreenCubit extends Cubit<LoginBloc> {
-  LoginScreenCubit() : super(LoginInitial());
-
+class LoginScreenBloc {
   final _userNameController = BehaviorSubject<String>();
   final _passwordController = BehaviorSubject<String>();
   final _integerController = PublishSubject<int>();
+
 
   Stream<int> get getIntegers => _integerController.stream;
 
@@ -17,9 +13,19 @@ class LoginScreenCubit extends Cubit<LoginBloc> {
 
   Stream<String> get passwordStream => _passwordController.stream;
 
-  void addNumber(int number) {
-    _integerController.sink.add(number);
+  int k = 0;
+
+  void increment() {
+    k++;
+    _integerController.sink.add(k);
   }
+
+
+  void decrement() {
+    k--;
+    _integerController.sink.add(k);
+  }
+
 
   void clearStreams() {
     updateUserName('');
@@ -49,10 +55,4 @@ class LoginScreenCubit extends Cubit<LoginBloc> {
         passwordStream,
         (a, b) => true,
       );
-
-  @override
-  Future<void> close() {
-    _integerController.close();
-    return super.close();
-  }
 }

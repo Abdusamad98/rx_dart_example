@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rx_dart_example/bloc/login_bloc_cubit.dart';
 import 'login_screen.dart';
 
 void main() {
@@ -12,14 +10,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<LoginScreenCubit>(create: (context) => LoginScreenCubit()),
-      ],
-      child: const MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: LoginScreen(),
-      ),
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: LoginScreen(),
     );
   }
 }

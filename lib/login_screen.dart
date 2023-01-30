@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'bloc/login_bloc_cubit.dart';
 import 'custom_widgets/custom_plain_button.dart';
@@ -13,22 +12,15 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  LoginScreenCubit? _loginScreenCubit;
+  final LoginScreenBloc _loginScreenBloc = LoginScreenBloc();
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loginScreenCubit?.clearStreams();
-    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    _loginScreenCubit = BlocProvider.of<LoginScreenCubit>(
-      context,
-      listen: false,
-    );
     return Scaffold(
       appBar: AppBar(
         title: const Text('Validation with BloC'),
@@ -55,13 +47,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 10,
                   ),
                   StreamBuilder(
-                      stream: _loginScreenCubit?.userNameStream,
+                      stream: _loginScreenBloc.userNameStream,
                       builder: (context, snapshot) {
                         return Column(
                           children: [
                             CustomTextField(
                               onChange: (text) {
-                                _loginScreenCubit?.updateUserName(text);
+                                _loginScreenBloc.updateUserName(text);
                               },
                               labelText: 'Username',
                               textInputType: TextInputType.emailAddress,
@@ -75,13 +67,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 10,
                   ),
                   StreamBuilder(
-                      stream: _loginScreenCubit?.passwordStream,
+                      stream: _loginScreenBloc.passwordStream,
                       builder: (context, snapshot) {
                         return Column(
                           children: [
                             CustomTextField(
                               onChange: (text) {
-                                _loginScreenCubit?.updatePassword(text);
+                                _loginScreenBloc.updatePassword(text);
                               },
                               labelText: 'Password',
                               textInputType: TextInputType.text,
@@ -96,8 +88,25 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ],
               )),
+              ElevatedButton(
+                onPressed: () {
+                  _loginScreenBloc.increment();
+                },
+                child: const Text("+"),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  _loginScreenBloc.decrement();
+                },
+                child: StreamBuilder(
+                  stream: _loginScreenBloc.getIntegers,
+                  builder: (context, snapshot) {
+                    return Text(snapshot.data.toString());
+                  },
+                ),
+              ),
               StreamBuilder(
-                stream: _loginScreenCubit?.validateForm,
+                stream: _loginScreenBloc.validateForm,
                 builder: (context, snapshot) {
                   return CustomPlainButton(
                     isEnabled: snapshot.hasData,
