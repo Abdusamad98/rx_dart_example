@@ -30,3 +30,5 @@ class AppTheme{
       scaffoldBackgroundColor: Colors.white
   );
 }
+
+/// Product class
